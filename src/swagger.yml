@@ -56,6 +56,10 @@ components:
       bearerFormat: JWT
       x-bearerInfoFunc: "routes.auth.decode_token"
 
+security:
+  - jwtAuth: ['secret']
+
+
 
 paths:
   /users:
@@ -94,8 +98,6 @@ paths:
       operationId: "routes.posts.create"
       tags:
         - Posts
-      security:
-        - jwtAuth: ['secret']
       summary: "Create a new post."
       requestBody:
         description: "Post to create."
@@ -164,4 +166,20 @@ paths:
       responses:
         201:
           description: "Successfully registred user."
+
+  /posts/{post_id}/like:
+    post:
+      operationId: "routes.likes.like_post"
+      tags:
+        - Posts
+      summary: "Like/unlike the post with post_id."
+      parameters:
+        - $ref: "#/components/parameters/post_id"
+      responses:
+        200:
+          description: "Post is successfully unliked."
+        201:
+          description: "Post is successfully liked."
+        401:
+          description: "Unauthorized."
 
