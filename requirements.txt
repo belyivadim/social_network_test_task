@@ -1,0 +1,5 @@
+Flask==2.2.3
+connexion[swagger-ui]
+psycopg2
+flask-marshmallow[sqlalchemy]
+python-jose[cryptography]

@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: "Mini social network API"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          maxLength: 50
+        password:
+          type: string
+          maxLength: 32
+
+    Post:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+
+
+  parameters:
+    username:
+      name: username
+      description: "Username of the user."
+      in: path
+      required: True
+      schema:
+        type: string
+        maxLength: 50
+
+    post_id:
+      name: post_id
+      description: "Id of the post."
+      in: path
+      required: True
+      schema:
+        type: integer
+
+
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: "routes.auth.decode_token"
+
+
+paths:
+  /users:
+    get:
+      operationId: "routes.users.get_all"
+      tags:
+        - Users
+      summary: "Get all users."
+      responses:
+        "200":
+          description: "Successfully read a list of users."
+
+  /users/{username}:
+    get:
+      operationId: "routes.users.get_one"
+      tags:
+        - Users
+      summary: "Get user by username"
+      parameters:
+        - $ref: "#/components/parameters/username"
+      responses:
+        200:
+          description: "Successfully get user."
+
+  /posts:
+    get:
+      operationId: "routes.posts.get_all"
+      tags:
+        - Posts
+      summary: "Get all posts."
+      responses:
+        200:
+          description: "Successfully get list of the posts."
+
+    post:
+      operationId: "routes.posts.create"
+      tags:
+        - Posts
+      security:
+        - jwtAuth: ['secret']
+      summary: "Create a new post."
+      requestBody:
+        description: "Post to create."
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "post"
+              $ref: "#/components/schemas/Post"
+      responses:
+        201:
+          description: "Successfully created post."
+        401:
+          description: "Access token is missing or invalid."
+
+
+  /posts/{post_id}:
+    get:
+      operationId: "routes.posts.get_one"
+      tags:
+        - Posts
+      summary: "Get post by post_id."
+      parameters:
+        - $ref: "#/components/parameters/post_id"
+      responses:
+        200:
+          description: "Successfully get post."
+
+
+  /auth/signin:
+    post:
+      operationId: "routes.auth.signin"
+      tags:
+        - Auth
+      security: []
+      summary: "Signin as a user"
+      requestBody:
+        description: "User to signin."
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "user"
+              $ref: "#/components/schemas/User"
+      responses:
+        201:
+          description: "Successfully signed in."
+        401:
+          description: "Wrong username or password."
+
+  /auth/signup:
+    post:
+      operationId: "routes.auth.signup"
+      tags:
+        - Auth
+      security: []
+      summary: "Register a new user."
+      requestBody:
+        description: "User to register."
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "user"
+              $ref: "#/components/schemas/User"
+      responses:
+        201:
+          description: "Successfully registred user."
+
