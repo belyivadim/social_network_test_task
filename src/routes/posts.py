@@ -5,6 +5,10 @@ from models.post import Post, post_schema, posts_schema
 
 def get_all():
     posts = Post.query.all()
+
+    for post in posts:
+        post.likes_count = post.get_post_likes_count()
+
     return posts_schema.dump(posts)
 
 
@@ -12,6 +16,7 @@ def get_one(post_id: int):
     post = Post.query.filter(Post.id == post_id).one_or_none()
 
     if post is not None:
+        post.likes_count = post.get_post_likes_count()
         return post_schema.dump(post)
     else:
         abort(404, f"Post with username {post_id} not found")

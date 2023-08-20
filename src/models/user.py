@@ -14,7 +14,7 @@ class User(db.Model):
     last_login = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship(
             Post,
-            backref="person",
+            backref="user",
             cascade="all, delete, delete-orphan",
             single_parent=True,
             order_by="desc(Post.created_at)"
