@@ -3,7 +3,9 @@ from sqlalchemy import and_
 
 from models.like import Like, like_schema
 from config import db
+from utils.update_last_iteraction import update_last_iteraction
 
+@update_last_iteraction
 def like_post(post_id: int, token_info):
     user_id = token_info['user_id']
     existing_like = Like.query.filter(and_(

@@ -1,8 +1,11 @@
 from flask import abort
+
 from config import db
 from models.post import Post, post_schema, posts_schema
+from utils.update_last_iteraction import update_last_iteraction
 
 
+@update_last_iteraction
 def get_all():
     posts = Post.query.all()
 
@@ -12,6 +15,7 @@ def get_all():
     return posts_schema.dump(posts)
 
 
+@update_last_iteraction
 def get_one(post_id: int):
     post = Post.query.filter(Post.id == post_id).one_or_none()
 
@@ -22,6 +26,7 @@ def get_one(post_id: int):
         abort(404, f"Post with username {post_id} not found")
 
 
+@update_last_iteraction
 def create(post, token_info):
     post["user_id"] = token_info["user_id"]
     new_post = post_schema.load(post, session=db.session)

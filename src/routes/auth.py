@@ -1,5 +1,6 @@
+from datetime import datetime
 from time import time
-from flask import abort
+from flask import abort, g
 from jose import JWTError, jwt
 from werkzeug.exceptions import Unauthorized
 from models.user import User, user_schema
@@ -20,6 +21,10 @@ def signin(user: dict):
 
     if existing_user is None or existing_user.password != password:
         abort(401, "Wrong username or password")
+
+    existing_user.last_login = datetime.utcnow()
+    db.session.merge(existing_user)
+    db.session.commit()
 
     user_id = existing_user.id
     ts = int(time())
@@ -51,6 +56,7 @@ def signup(user):
 
 def decode_token(token: str):
     try:
-        return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        g.token_info = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return g.token_info
     except JWTError as e:
         raise Unauthorized from e
