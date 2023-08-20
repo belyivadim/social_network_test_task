@@ -48,6 +48,7 @@ components:
       schema:
         type: integer
 
+    
 
   securitySchemes:
     jwtAuth:
@@ -183,3 +184,28 @@ paths:
         401:
           description: "Unauthorized."
 
+
+  /analytics:
+    get:
+      operationId: "routes.analytics.count_likes_for_period"
+      tags:
+        - Analytics
+      summary: "Get analytics for a period within date_from - date_to."
+      parameters:
+        - name: date_from
+          in: query
+          required: True
+          schema:
+            type: string
+            format: date
+          description: "The start date for the analytics. In format YYYY-MM-DD."
+        - name: date_to
+          in: query
+          required: True
+          schema:
+            type: string
+            format: date
+          description: "The end date for the analytics. In format YYYY-MM-DD."
+      responses:
+        200:
+          description: "Successfully get analytics."
