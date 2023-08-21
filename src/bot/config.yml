@@ -1,0 +1,16 @@
+--- !Bot
+users_info: !!map
+  number_of_users: !!int 5
+  max_posts_per_user: !!int 5
+  min_likes_per_user: !!int 5
+  max_likes_per_user: !!int 10
+
+base_url: !!str "http://localhost:8080/api"
+
+headers: !!map
+  Content-Type: !!str "Application/json"
+
+authorization: !!map
+  type: !!str "Bearer"
+
+out_json: !!str "users_dump.json"

@@ -8,3 +8,5 @@ venv
 README-secret.md
 # github related files
 .github/
+# bot related files
+src/bot/
