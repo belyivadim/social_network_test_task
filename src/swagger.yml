@@ -70,8 +70,10 @@ paths:
         - Users
       summary: "Get all users."
       responses:
-        "200":
+        200:
           description: "Successfully read a list of users."
+        401:
+          description: "Unauthorized."
 
   /users/{username}:
     get:
@@ -84,6 +86,8 @@ paths:
       responses:
         200:
           description: "Successfully get user."
+        401:
+          description: "Unauthorized."
 
   /posts:
     get:
@@ -94,6 +98,8 @@ paths:
       responses:
         200:
           description: "Successfully get list of the posts."
+        401:
+          description: "Unauthorized."
 
     post:
       operationId: "routes.posts.create"
@@ -112,7 +118,7 @@ paths:
         201:
           description: "Successfully created post."
         401:
-          description: "Access token is missing or invalid."
+          description: "Unauthorized."
 
 
   /posts/{post_id}:
@@ -126,6 +132,8 @@ paths:
       responses:
         200:
           description: "Successfully get post."
+        404:
+          description: "Post with post_id is not found."
 
 
   /auth/signin:
@@ -144,7 +152,7 @@ paths:
               x-body-name: "user"
               $ref: "#/components/schemas/User"
       responses:
-        201:
+        200:
           description: "Successfully signed in."
         401:
           description: "Wrong username or password."
@@ -155,9 +163,9 @@ paths:
       tags:
         - Auth
       security: []
-      summary: "Register a new user."
+      summary: "Registrate a new user."
       requestBody:
-        description: "User to register."
+        description: "User to registrate."
         required: True
         content:
           application/json:
@@ -167,6 +175,8 @@ paths:
       responses:
         201:
           description: "Successfully registred user."
+        409:
+          description: "User with username already exists."
 
   /posts/{post_id}/like:
     post:
@@ -190,7 +200,7 @@ paths:
       operationId: "routes.analytics.count_likes_for_period"
       tags:
         - Analytics
-      summary: "Get analytics for a period within date_from - date_to."
+      summary: "Get analytics about how many likes was made for a period within date_from - date_to."
       parameters:
         - name: date_from
           in: query
@@ -209,3 +219,6 @@ paths:
       responses:
         200:
           description: "Successfully get analytics."
+        401:
+          description: "Unauthorized."
+

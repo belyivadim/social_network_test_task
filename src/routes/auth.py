@@ -36,7 +36,7 @@ def signin(user: dict):
 
     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
-    return { "token": token }
+    return { "token": token }, 200
 
 
 def signup(user):
@@ -45,7 +45,7 @@ def signup(user):
     existing_user = User.query.filter(User.username == username).one_or_none()
 
     if existing_user is not None:
-        abort(406, f"User with username {username} already exists")
+        abort(409, f"User with username {username} already exists")
 
     new_user = user_schema.load(user, session=db.session)
     db.session.add(new_user)
