@@ -88,6 +88,8 @@ paths:
           description: "Successfully get user."
         401:
           description: "Unauthorized."
+        404:
+          description: "User with username is not found."
 
   /posts:
     get:
